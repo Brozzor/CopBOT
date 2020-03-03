@@ -1,0 +1,23 @@
+{
+  "name": "copbot",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Brozzor/CopBOT.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Brozzor/CopBOT/issues"
+  },
+  "homepage": "https://github.com/Brozzor/CopBOT#readme",
+  "dependencies": {
+    "mysql": "^2.18.1",
+    "puppeteer": "^2.1.1"
+  }
+}
