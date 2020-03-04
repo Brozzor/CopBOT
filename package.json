@@ -18,6 +18,7 @@
   "homepage": "https://github.com/Brozzor/CopBOT#readme",
   "dependencies": {
     "mysql": "^2.18.1",
-    "puppeteer": "^2.1.1"
+    "puppeteer": "^2.1.1",
+    "user-agents": "^1.0.550"
   }
 }
