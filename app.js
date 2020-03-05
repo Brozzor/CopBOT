@@ -1,4 +1,3 @@
-'use strict';
 const puppeteer = require("puppeteer")
 const mysql = require('./bdd');
 const Copbot = require('./func');
@@ -10,7 +9,7 @@ const Copbot = require('./func');
         //const page = await browser.newPage()
 
         const copbot = await Copbot(browser);
-        copbot.importUrlFollowing();
+        copbot.importUrlFollowingSupreme();
 
  } catch (error) {
     console.log(error);
