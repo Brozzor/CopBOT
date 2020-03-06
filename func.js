@@ -25,7 +25,10 @@ module.exports = async browser => {
   }
 
   async function insertCopStuff(idProduct, link, title, model, price, imgLink, available_date) {
-   await checkProductIsExist(idProduct);
+
+   if !(await checkProductIsExist(idProduct)){
+   		console.log('test')
+   }
     /*let sqlRequest = "SELECT * FROM number ORDER BY id DESC LIMIT 10";
     mysql.conn.query(sqlRequest, function(err, rows, fields) {
      
