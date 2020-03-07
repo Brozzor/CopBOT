@@ -14,31 +14,31 @@ module.exports = async browser => {
   }
 
   async function checkProductIsExist(idProduct) {
-    let sqlRequest = `SELECT count(*) as nb FROM cop_stuff WHERE id_product = '${idProduct}'`;
-    mysql.conn.query(sqlRequest, function(err, rows, fields) {
-        if (rows[0].nb != '0')
+    let res = true;
+    const nb = await mysql.query( `SELECT count(*) as nb FROM cop_stuff WHERE id_product = '${idProduct}'` );
+        if (nb[0].nb != '0')
         {
-            return true;
+          res = true;
+        }else{
+          res = false;
         }
-        return false;
-    });
+    return res;
   }
 
-  async function insertCopStuff(idProduct, link, title, model, price, imgLink, available_date) {
-
-   if !(await checkProductIsExist(idProduct)){
-   		console.log('test')
+  async function insertCopStuff(site,idProduct, link, title, model, price, imgLink, available_date) {
+/*
+   if (!await checkProductIsExist(idProduct)){
+    //let sqlRequest = `INSERT INTO cop_stuff(id_website,id_product,link,title,model,price,imgLink,available_date) VALUES('${site}','${idProduct}','${link}','${title}','${model}','${price}','${title}','${imgLink}','${available_date}')`;
+    //await mysql.query(sqlRequest);
    }
-    /*let sqlRequest = "SELECT * FROM number ORDER BY id DESC LIMIT 10";
-    mysql.conn.query(sqlRequest, function(err, rows, fields) {
-     
-    });*/
+*/
   }
 
   async function importInfo(link, site) {
     let i = 0;
     while (i < link.length) {
       await page.goto(link[i]);
+      //await page.waitForNavigation();
       let result, price, date, idProduct, title, model, img;
       if (site == "nike") {
         result = await page.evaluate(() => {
@@ -46,6 +46,7 @@ module.exports = async browser => {
           date = document.getElementsByClassName("ncss-brand pb6-sm fs14-sm fs16-md")[1].innerText;
           return { price, date };
         });
+        site = '2';
       } else if (site == "supreme") {
         result = await page.evaluate(() => {
           price = document.getElementsByClassName("price")[0].lastElementChild.innerText;
@@ -55,12 +56,13 @@ module.exports = async browser => {
           date = "rien";
           return { price, date, title, model, img };
         });
+        site = '1';
         result.price = await extractNbr(result.price);
         idProduct = link[i].split("/")[5] + "/" + link[i].split("/")[6];
       }
-      await insertCopStuff(idProduct, link[i], result.title, result.model, result.price, result.img, "0");
+      console.log(result.title)
+      await insertCopStuff(site,idProduct, link[i], result.title, result.model, result.price, result.img, "0");
       i++;
-      await sleep(1000);
     }
   }
 
