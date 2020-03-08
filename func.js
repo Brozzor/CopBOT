@@ -26,12 +26,14 @@ module.exports = async browser => {
   }
 
   async function insertCopStuff(site,idProduct, link, title, model, price, imgLink, available_date) {
-/*
+
    if (!await checkProductIsExist(idProduct)){
-    //let sqlRequest = `INSERT INTO cop_stuff(id_website,id_product,link,title,model,price,imgLink,available_date) VALUES('${site}','${idProduct}','${link}','${title}','${model}','${price}','${title}','${imgLink}','${available_date}')`;
-    //await mysql.query(sqlRequest);
+    let titleCheck = title.replace(/'/g, '\\\\\"');
+    let modelCheck = model.replace(/'/g, '\\\\\"');
+    let sqlRequest = `INSERT INTO cop_stuff(id_website,id_product,link,title,model,price,imgLink,available_date) VALUES('${site}','${idProduct}','${link}','${titleCheck}','${modelCheck}','${price}','${imgLink}','${available_date}')`;
+    mysql.conn.query(sqlRequest);
    }
-*/
+
   }
 
   async function importInfo(link, site) {
@@ -39,14 +41,14 @@ module.exports = async browser => {
     while (i < link.length) {
       await page.goto(link[i]);
       //await page.waitForNavigation();
-      let result, price, date, idProduct, title, model, img;
+      let result, price, date, idProduct, title, model, img, website;
       if (site == "nike") {
         result = await page.evaluate(() => {
           price = document.getElementsByClassName("ncss-brand pb6-sm fs14-sm fs16-md")[0].innerText;
           date = document.getElementsByClassName("ncss-brand pb6-sm fs14-sm fs16-md")[1].innerText;
           return { price, date };
         });
-        site = '2';
+        website = '2';
       } else if (site == "supreme") {
         result = await page.evaluate(() => {
           price = document.getElementsByClassName("price")[0].lastElementChild.innerText;
@@ -56,12 +58,12 @@ module.exports = async browser => {
           date = "rien";
           return { price, date, title, model, img };
         });
-        site = '1';
+        website = '1';
         result.price = await extractNbr(result.price);
         idProduct = link[i].split("/")[5] + "/" + link[i].split("/")[6];
       }
-      console.log(result.title)
-      await insertCopStuff(site,idProduct, link[i], result.title, result.model, result.price, result.img, "0");
+      //console.log(result.title)
+      await insertCopStuff(website,idProduct, link[i], result.title, result.model, result.price, result.img, "0");
       i++;
     }
   }
