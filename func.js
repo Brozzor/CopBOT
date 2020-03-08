@@ -104,12 +104,17 @@ module.exports = async browser => {
     importInfo(result, "supreme");
   }
 
+  async function buy(userid) {
+    
+  }
+
   page = await browser.newPage();
   const userAgent = new UserAgent();
   await page.setUserAgent(userAgent.toString());
   return {
     sleep,
     importUrlFollowing,
-    importUrlFollowingSupreme
+    importUrlFollowingSupreme,
+    buy,
   };
 };
