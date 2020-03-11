@@ -9,12 +9,10 @@ const Copbot = require('./func');
         const copbot = await Copbot(browser);
 
         let args = process.argv.slice(2);
-
+        await copbot.checkAllCat();
         // insertion dans la base de donnée
-        //await copbot.importUrlFollowingSupreme();
+        await copbot.importUrlFollowingSupreme();
 
-        // achat 
-        await copbot.buy(args[0]);
 
  } catch (error) {
     console.log(error);

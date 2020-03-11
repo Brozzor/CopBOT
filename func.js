@@ -9,8 +9,27 @@ module.exports = async browser => {
     console.log("Sleeping", msWithDev / 1000, "sec");
     return new Promise(resolve => setTimeout(resolve, msWithDev));
   };
+
   async function extractNbr(str) {
     return Number(str.replace(/[^\d]/g, ""));
+  }
+  
+  async function checkAllCat() {
+    await page.goto('https://www.supremenewyork.com/shop/all');
+    result = await page.evaluate(() => {
+    let i = 2;
+    let board = [];
+    while (i < document.getElementById('nav-categories').getElementsByTagName('a').length) {
+      catname = document.getElementById('nav-categories').getElementsByTagName('a')[i].innerText;
+      catnameClean = catname.replace("/","-" );
+      board.push(catnameClean);
+      //const nb = await mysql.query( `SELECT * FROM cat_stuff WHERE nom = '${idProduct}'` );
+      i++;
+    }
+      return board;
+    });
+    console.log(result);
+
   }
 
   async function checkProductIsExist(idProduct) {
@@ -116,5 +135,6 @@ module.exports = async browser => {
     importUrlFollowing,
     importUrlFollowingSupreme,
     buy,
+    checkAllCat,
   };
 };
