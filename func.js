@@ -28,7 +28,17 @@ module.exports = async browser => {
     }
       return board;
     });
-    console.log(result);
+    let i = 0;
+    while (i < result.length) {
+      const nb = await mysql.query( `SELECT count(*) as nb FROM cat_stuff WHERE name = '${result[i]}'` );
+      if (nb[0].nb == '0')
+        {
+          let sqlRequest = `INSERT INTO cat_stuff(name) VALUES('${result[i]}')`;
+          mysql.conn.query(sqlRequest);
+        }
+      
+    i++;
+    }
 
   }
 
