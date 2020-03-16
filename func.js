@@ -3,6 +3,8 @@ const UserAgent = require("user-agents");
 
 module.exports = async browser => {
   let page;
+  let tempProductNow = [];
+  let tempProductDel = [];
 
   const sleep = (ms, dev = 1) => {
     const msWithDev = (Math.random() * dev + 1) * ms;
@@ -40,6 +42,33 @@ module.exports = async browser => {
     }
   }
 
+  async function delOldItems() {
+    let i = 0;
+    const row = await mysql.query(`SELECT id_product as id FROM cop_stuff`);
+    while (i < row.length) {
+      let j = 0;
+      let finding = true;
+      while (j < tempProductNow.length){
+        if (row[i].id == tempProductNow[j]){
+          finding = false;
+          break;
+        }
+        j++;
+      }
+      if (finding){
+        tempProductDel.push(row[i].id);
+      }
+      i++;
+    }
+    i = 0;
+    while(i < tempProductDel.length){
+      let sqlRequest = `DELETE FROM cop_stuff WHERE id_product = '${tempProductDel[i]}'`;
+      mysql.conn.query(sqlRequest);
+      i++;
+    }
+    return false;
+  }
+  
   async function checkProductIsExist(idProduct) {
     let res = true;
     const nb = await mysql.query(`SELECT count(*) as nb FROM cop_stuff WHERE id_product = '${idProduct}'`);
@@ -56,9 +85,12 @@ module.exports = async browser => {
       const idcat = await mysql.query(`SELECT id FROM cat_stuff WHERE name = '${catProduct}' LIMIT 1`);
       let titleCheck = title.replace(/'/g, '\\\\"');
       let modelCheck = model.replace(/'/g, '\\\\"');
+      
       let sqlRequest = `INSERT INTO cop_stuff(id_website,id_product,cat_id,link,title,model,price,imgLink,available_date) VALUES('${site}','${idProduct}','${idcat[0].id}','${link}','${titleCheck}','${modelCheck}','${price}','${imgLink}','${available_date}')`;
       mysql.conn.query(sqlRequest);
     }
+    tempProductNow.push(idProduct);
+    return false;
   }
 
   async function importInfo(link, site) {
@@ -100,6 +132,7 @@ module.exports = async browser => {
         result.img,
         "0"
       );
+      //console.log(i);
       i++;
     }
   }
@@ -139,10 +172,8 @@ module.exports = async browser => {
       }
       return linkFuturStock;
     });
-    importInfo(result, "supreme");
+    await importInfo(result, "supreme");
   }
-
-  async function buy(userid) {}
 
   page = await browser.newPage();
   const userAgent = new UserAgent();
@@ -151,7 +182,7 @@ module.exports = async browser => {
     sleep,
     importUrlFollowing,
     importUrlFollowingSupreme,
-    buy,
-    checkAllCat
+    checkAllCat,
+    delOldItems
   };
 };
