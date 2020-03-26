@@ -15,7 +15,7 @@ const Copbot = require("./func");
     await copbot.importUrlFollowingSupreme();
     // suppression des produits inexesistant
     await copbot.delOldItems();
-
+    await copbot.sleep(10000);
   } catch (error) {
     console.log(error);
   } finally {
