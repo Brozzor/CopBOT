@@ -4,8 +4,8 @@ let util = require('util');
 let conn = mysql.createConnection({
     database: "copbot",
     host: "164.132.46.160",
-    user: "copbot1",
-    password: "NgF6Sy9zi6TOt7f7"
+    user: "copbot",
+    password: "FZJOKbh0tkfu73ZU"
   });
 
 const query = util.promisify(conn.query).bind(conn);
