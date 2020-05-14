@@ -9,13 +9,18 @@ const Copbot = require("./func");
     const copbot = await Copbot(browser);
 
     let args = process.argv.slice(2);
-    await copbot.checkAllCat();
+    if (args == "update") {
+      await copbot.checkAllCat();
 
-    // insertion dans la base de donnée
-    await copbot.importUrlFollowingSupreme();
-    // suppression des produits inexesistant
-    await copbot.delOldItems();
-    await copbot.sleep(10000);
+      // insertion dans la base de donnée
+      await copbot.importUrlFollowingSupreme();
+      // suppression des produits inexesistant
+      await copbot.delOldItems();
+      await copbot.sleep(10000);
+    } else if (args == "times") {
+      await copbot.times();
+    }
+    console.log("wsh");
   } catch (error) {
     console.log(error);
   } finally {

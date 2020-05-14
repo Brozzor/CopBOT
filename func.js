@@ -1,5 +1,6 @@
 const mysql = require("./bdd");
 const UserAgent = require("user-agents");
+const fetch = require("node-fetch");
 
 module.exports = async browser => {
   let page;
@@ -175,6 +176,25 @@ module.exports = async browser => {
     await importInfo(result, "supreme");
   }
 
+  async function times() {
+    const response = await fetch('https://www.supremenewyork.com/mobile_stock.json');
+    let json = await response.json();
+    json = json.products_and_categories.new
+    let i = 0;
+    while (i < json.length){
+      const resItems = await fetch('https://www.supremenewyork.com/shop/' + json[i] + '.json');
+      let jsonItems = await resItems.json();
+      console.log('--------')
+      console.log(json[i])
+      console.log(jsonItems)
+      console.log('--------')
+      i++;
+    }
+    json = json.products_and_categories.new[1];
+
+    console.log(json.products_and_categories.new[1]);
+  }
+
   page = await browser.newPage();
   const userAgent = new UserAgent();
   await page.setUserAgent(userAgent.toString());
@@ -183,6 +203,7 @@ module.exports = async browser => {
     importUrlFollowing,
     importUrlFollowingSupreme,
     checkAllCat,
-    delOldItems
+    delOldItems,
+    times
   };
 };
