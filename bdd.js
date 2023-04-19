@@ -2,10 +2,10 @@ let mysql = require("mysql");
 let util = require('util');
 
 let conn = mysql.createConnection({
-    database: "copbot",
-    host: "164.132.46.160",
-    user: "copbot",
-    password: "FZJOKbh0tkfu73ZU"
+    database: "",
+    host: "",
+    user: "",
+    password: ""
   });
 
 const query = util.promisify(conn.query).bind(conn);
