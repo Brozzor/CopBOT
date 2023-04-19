@@ -1,4 +1,4 @@
-# 👟 BEST COP BOT 👟
+# 👟 DEPRECATED BEST COP BOT 👟
 ## Installation : 
 - npm install 
 
