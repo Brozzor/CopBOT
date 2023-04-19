@@ -1,4 +1,4 @@
-# 👟 DEPRECATED BEST COP BOT 👟
+# 👟 DEPRECATED supremenewyork scrapper for copfinder 👟
 ## Installation : 
 - npm install 
 
